@@ -13,9 +13,9 @@ class Abstract {
   }
 
   private apiAxios ({ baseURL = this.baseURL, headers = this.headers, method, url, data, params, responseType }: AxiosRequest): Promise<CustomResponse> {
-    Object.assign(headers, {
-      token: getToken()
-    })
+    // Object.assign(headers, {
+    //   token: getToken()
+    // })
 
     // url解析
     const _url = (url as string).split('.')

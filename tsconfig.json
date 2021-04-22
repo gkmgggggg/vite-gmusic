@@ -15,7 +15,13 @@
     "types": [
       "vite/client",
       "jest"
-    ]
+    ],
+    "paths": {
+      // 根据别名配置相关路径
+      "@/*": [
+        "./src/*"
+      ]
+    }
   },
   "include": [
     "src/**/*.ts",

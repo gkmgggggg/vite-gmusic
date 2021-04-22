@@ -8,11 +8,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue'
+import { defineComponent, onMounted, reactive, toRefs } from 'vue'
 import Banner from './components/Banner.vue'
 import RecommendSongs from './components/RecommendSongs.vue'
 import RecommendMusic from './components/RecommendMusic.vue'
 import RecommendSinger from './components/RecommendSinger.vue'
+import { basicApi } from '@/api/index'
+// import { getBanner } from '@/api/demo'
 
 export default defineComponent({
   name: 'Home',
@@ -23,6 +25,7 @@ export default defineComponent({
     RecommendSinger
   },
   setup () {
+    console.log(basicApi)
     const state = reactive({
       banner: [
         { imageUrl: 'https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2496571732,442429806&fm=26&gp=0.jpg' },
@@ -38,14 +41,20 @@ export default defineComponent({
     // 获取banner数据
     const getBanner = async () => {
       try {
-        // const res = await ctx.$api.getBanner()
-        // state.banner = res.res
+        const res = await basicApi.getBanner()
+        console.log(res)
+        state.banner = res.data
       } catch (error) {
         console.log(error)
       }
     }
 
-    return { ...toRefs(state), getBanner }
+    onMounted(() => {
+      getBanner()
+      // console.log(getBanner())
+    })
+
+    return { ...toRefs(state) }
   }
 })
 </script>

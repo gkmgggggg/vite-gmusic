@@ -16,7 +16,7 @@ const pending: Array<PendingType> = []
 const CancelToken = axios.CancelToken
 // axios 实例
 const instance = axios.create({
-  timeout: 100000,
+  timeout: 1000 * 5,
   responseType: 'json'
 })
 let loadingInstance:any

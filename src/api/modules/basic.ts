@@ -3,8 +3,6 @@
  * @date 2020-5-29
  */
 import Abstract from '../../utils/request/abstract'
-import x from '../types/index'
-console.log(x)
 
 interface AuthLoginType {
   account: string;
@@ -23,6 +21,14 @@ class Basic extends Abstract {
    */
   authLogin (data: AuthLoginType) {
     return this.getReq({ url: 'Basic.AuthLogin', data })
+  }
+
+  /**
+ * 登录
+ * @method 获取轮播图数据
+ */
+  getBanner () {
+    return this.getReq({ url: 'Basic.getBanner' })
   }
 }
 
