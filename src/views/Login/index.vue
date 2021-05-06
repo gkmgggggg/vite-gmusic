@@ -62,6 +62,7 @@ import { defineComponent, reactive, toRefs } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { userApi } from '@/api/index'
 
 export default defineComponent({
   setup () {
@@ -92,52 +93,49 @@ export default defineComponent({
     }
     // 处理登录
     async function handleLogin () {
-      // if (verification()) {
-      //   const res = await ctx.$api.login(state.phone, state.password)
-      //   console.log(res)
-      //   if (res.code == 200) {
-      //     ElMessage.success({
-      //       message: '登录成功!!!',
-      //       type: 'success'
-      //     })
-      //     // ctx.$message.success("登录成功!!!");
-      //     window.localStorage.setItem('userInfo', JSON.stringify(res.res))
-      //     window.localStorage.setItem('loginStatu', true)
-      //     window.localStorage.setItem('Authorization', res.Authorization)
-      //     store.commit('SET_LOGINSTATU', true)
-      //     setTimeout(() => {
-      //       state.loginLoading = false
-      //       router.push({ path: '/' })
-      //     }, 1500)
-      //   } else {
-      //     ElMessage.warning({
-      //       message: '登录失败!!!',
-      //       type: 'warning'
-      //     })
-      //     // ctx.$message.warning("登录失败!!!");
-      //   }
-      // }
+      if (verification()) {
+        const res = await userApi.authLogin({ account: state.phone, password: state.password })
+        console.log(res)
+        if (res.status) {
+          ElMessage.success({
+            message: '登录成功!!!',
+            type: 'success'
+          })
+          window.localStorage.setItem('userInfo', JSON.stringify(res.data))
+          window.localStorage.setItem('loginStatu', 'true')
+          window.localStorage.setItem('Authorization', res.origin.Authorization)
+          store.commit('SET_LOGINSTATU', true)
+          setTimeout(() => {
+            state.loginLoading = false
+            router.push({ path: '/' })
+          }, 1500)
+        } else {
+          ElMessage.warning({
+            message: '登录失败!!!',
+            type: 'warning'
+          })
+          // ctx.$message.warning("登录失败!!!");
+        }
+      }
     }
     // 处理注册
     async function handleRegister () {
-      // if (verification()) {
-      //   const res = await ctx.$api.register(state.phone, state.password)
-      //   if (res.code == 200) {
-      //     ElMessage.success({
-      //       message: '注册成功!!!',
-      //       type: 'success'
-      //     })
-      //     // ctx.$message.success("注册成功!!!");
-      //     // 执行登录
-      //     handleLogin()
-      //   } else {
-      //     ElMessage.warning({
-      //       message: res.msg,
-      //       type: 'warning'
-      //     })
-      //     // ctx.$message.warning(res.msg);
-      //   }
-      // }
+      if (verification()) {
+        const res = await userApi.authRegister({ account: state.phone, password: state.password })
+        if (res.status) {
+          ElMessage.success({
+            message: '注册成功!!!',
+            type: 'success'
+          })
+          // 执行登录
+          handleLogin()
+        } else {
+          ElMessage.warning({
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      }
     }
     // 登录数据验证
     function verification () {

@@ -10,9 +10,9 @@ const urlDict: UrlDictType = {
     // getTag: '/tag' // 获取
   },
   User: {
-    authLogin: '/login',
-    authRegister: '/register',
-    getUserInfo: '/user',
+    authLogin: '/user/login',
+    authRegister: '/user/register',
+    getUserInfo: '/user/info',
     getUserSong: '/user/collectSong',
     getUserPlaylist: '/user/collectPlaylist'
   },

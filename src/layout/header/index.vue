@@ -17,45 +17,51 @@
         <li>
           <router-link :to="{ name: 'singer' }" tag="a">歌手</router-link>
         </li>
-        <!-- <li>
-          <router-link :to="{ name: 'home' }" tag="a">MV</router-link>
-        </li> -->
       </ul>
       <div class="search" @click="openSearchPop">
         <i class="iconfont nicesearch-o"></i>
       </div>
       <div class="userbox">
         <div class="line"></div>
-        <div class="is-login flex-row" v-if="loginStatu">
-          <!-- <a-avatar
+        <div class="is-login flex-row" v-if="userInfo">
+          <el-avatar
             :size="35"
             class="avatar"
             :src="userInfo.avatarUrl"
             @click="(e) => e.preventDefault()"
           >
-            <template v-slot:icon><UserOutlined /></template>
-          </a-avatar> -->
-          <!-- <a-dropdown :trigger="['click']">
+          </el-avatar>
+          <el-dropdown>
+            <span class="el-dropdown-link">
+              {{ userInfo.nickname }}<i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item @click="toUserDetail">个人主页</el-dropdown-item>
+                <el-dropdown-item>账户设置</el-dropdown-item>
+                <el-dropdown-item @click="handelLogout">退出登录</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+
+          <!-- <el-dropdown :trigger="['click']">
             <span class="el-dropdown-link" @click="(e) => e.preventDefault()">
               {{ userInfo.nickname }}
               <DownOutlined />
               <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <template v-slot:overlay>
-              <a-menu>
-                <a-menu-item key="0">
+              <el-dropdown-menu>
+                <el-dropdown-item key="0">
                   <a href="#" @click="toUserDetail">个人主页</a>
-                </a-menu-item>
-                <a-menu-item key="1">
+                </el-dropdown-item>
+                <el-dropdown-item key="1">
                   <a href="">账户设置</a>
-                </a-menu-item>
-                <a-menu-divider />
-                <a-menu-item key="3" @click="handelLogout"
-                  >退出登录</a-menu-item
-                >
-              </a-menu>
+                </el-dropdown-item>
+                <el-dropdown-item key="3" @click="handelLogout">退出登录</el-dropdown-item>
+              </el-dropdown-menu>
             </template>
-          </a-dropdown> -->
+          </el-dropdown> -->
         </div>
         <div class="no-login flex-row" @click="toLogin" v-else>登录</div>
       </div>
@@ -130,15 +136,9 @@ export default defineComponent({
     })
     const store = useStore()
     const router = useRouter()
-    const userInfo = computed(() => {
-      return store.getters.userInfo
-    })
-    const loginStatu = computed(() => {
-      return store.getters.loginStatu
-    })
-    const searchHistory = computed(() => {
-      return store.getters.searchHistory
-    })
+    const userInfo = computed(() => store.getters.userInfo)
+    const loginStatu = computed(() => store.getters.loginStatu)
+    const searchHistory = computed(() => store.getters.searchHistory)
     // 展开搜索框
     function openSearchPop () {
       state.searchOpenClass = 'open'
@@ -210,21 +210,25 @@ export default defineComponent({
     function toUserDetail () {
       router.push(`/personal?id=${userInfo.value._id}`)
     }
-    // 账户登出
+    // 账户登出f
     function handelLogout () {
       ElMessage.success({
         message: '登出成功!!!',
         type: 'success'
       })
-
       window.localStorage.removeItem('userInfo')
       window.localStorage.removeItem('token')
       window.localStorage.removeItem('Authorization')
       window.localStorage.setItem('loginStatu', '0')
       store.commit('SET_LOGINSTATU', false)
+
+      setTimeout(() => {
+        window.location.reload()
+      }, 500)
     }
     onMounted(() => {})
     onUpdated(() => {})
+
     return {
       ...toRefs(state),
       store,

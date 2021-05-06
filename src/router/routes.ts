@@ -91,6 +91,15 @@ export const appRouter = [{
         title: '歌手详情页面'
       },
       component: () => import('@/views/SingerDetail/index.vue')
+    },
+    // 个人主页
+    {
+      path: '/personal',
+      name: 'personal',
+      meta: {
+        title: '个人主页'
+      },
+      component: () => import('@/views/Personal/index.vue')
     }
   ]
 },

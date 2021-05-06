@@ -6,22 +6,45 @@ import Abstract from '../../utils/request/abstract'
 
 class Basic extends Abstract {
   /**
-   * 登录
+   * @method 用户登录
    * @param {string} account 用户
    * @param {string} password 密码
-   * @param {string} captchaCode 图形码
-   * @param {string} captchaCodeToken 图形码token
    */
-  // authLogin (data: AuthLoginType) {
-  //   return this.getReq({ url: 'Basic.AuthLogin', data })
-  // }
+  authLogin (params:any) {
+    return this.getReq({ url: 'User.authLogin', params })
+  }
 
   /**
- * 登录
- * @method 获取轮播图数据
+ * @method 用户注册
+ * @param {string} account 用户
+ * @param {string} password 密码
  */
-  getBanner () {
-    return this.getReq({ url: 'Basic.getBanner' })
+  authRegister (data: any) {
+    return this.postReq({ url: 'User.authRegister', data })
+  }
+
+  /**
+* @method 获取用户信息
+* @param {string} account 用户
+*/
+  getUserInfo (params: any) {
+    return this.getReq({ url: 'User.getUserInfo', params })
+  }
+
+  /**
+* @method 获取用户收藏歌曲
+* @param {string} account 用户
+*/
+  getUserSong (params: any) {
+    return this.getReq({ url: 'User.getUserSong', params })
+  }
+
+  /**
+* @method 获取用户收藏歌单
+* @param {string} account 用户
+*/
+  getUserPlaylist (params: any) {
+    return this.getReq({ url: 'User.getUserPlaylist', params })
   }
 }
 

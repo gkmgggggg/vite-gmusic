@@ -9,7 +9,7 @@ export const loginStatu = (state:State) => {
 
 // 用户信息
 export const userInfo = (state: State) => {
-  return state.userInfo || window.localStorage.getItem('userInfo')
+  return state.userInfo || JSON.parse(window.localStorage.getItem('userInfo') as string)
 }
 
 // 歌手信息
