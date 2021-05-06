@@ -8,6 +8,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, onUpdated, reactive, toRefs } from 'vue'
 import SongList from '@/components/SongList/index.vue'
+import { songApi } from '@/api/index'
 
 export default defineComponent({
   components: { SongList },
@@ -16,10 +17,10 @@ export default defineComponent({
       songs: []
     })
 
-    // 获取推荐新音乐
+    // 获取推荐歌曲
     async function getNewSongs () {
-      // const res = await ctx.$api.getNewSongs()
-      // state.songs = res.res
+      const res = await songApi.getRecommendSong()
+      state.songs = res.data
     }
 
     onMounted(() => {

@@ -14,6 +14,7 @@
 <script lang="ts">
 import { defineComponent, computed, onMounted, reactive } from 'vue'
 import SongSheet from '@/components/SongSheet/index.vue'
+import { playlistApi } from '@/api/index'
 
 export default defineComponent({
   components: {
@@ -27,10 +28,8 @@ export default defineComponent({
 
     // 获得排行榜数据
     async function getToplist () {
-      // const res = await ctx.$api.getToplist()
-      // if (res.code === 200) {
-      //   state.ranks = res.res
-      // }
+      const res = await playlistApi.getRank()
+      state.ranks = res.data
     }
     const featureList = computed(() => state.ranks.slice(0, 4))
     const globalList = computed(() => state.ranks.slice(4, state.ranks.length))
@@ -44,6 +43,26 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+$color-theme: #fa2800;
 
+.rank-wrap {
+  .module {
+    .title {
+      position: relative;
+      padding-left: 15px;
+      margin-bottom: 20px;
+
+      &::before {
+        content: "";
+        width: 3px;
+        height: 20px;
+        background: $color-theme;
+        position: absolute;
+        left: 0;
+        top: 2px;
+      }
+    }
+  }
+}
 </style>

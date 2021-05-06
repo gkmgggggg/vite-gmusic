@@ -13,6 +13,7 @@ export interface AxiosRequest {
 }
 
 export interface AxiosResponse {
+  success: boolean
   data: any;
   headers: object;
   request?: object;

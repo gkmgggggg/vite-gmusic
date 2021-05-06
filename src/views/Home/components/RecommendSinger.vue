@@ -10,6 +10,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, reactive, toRefs } from 'vue'
 import SingerItem from '@/components/SingerItem/index.vue'
+import { singerApi } from '@/api/index'
 
 export default defineComponent({
   components: {
@@ -21,21 +22,33 @@ export default defineComponent({
     })
 
     // 获取热门歌手
-    async function getHotSinger () {
-      // const res = await ctx.$api.getHotSinger()
-      // if (res.code == 200) {
-      //   state.singer = res.res
-      // }
+    async function getRecommendSinger () {
+      const res = await singerApi.getRecommendSinger()
+      state.singer = res.data
     }
 
     onMounted(() => {
-      getHotSinger()
+      getRecommendSinger()
     })
-    return { ...toRefs(state), getHotSinger }
+    return { ...toRefs(state) }
   }
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.recommend-singer {
+  margin-top: 40px;
 
+  .title {
+    text-align: left;
+    margin: 0 0 15px 0;
+  }
+
+  .singer-list {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 30px;
+    margin: 0px -15px 0;
+  }
+}
 </style>

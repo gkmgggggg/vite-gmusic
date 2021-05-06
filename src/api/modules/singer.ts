@@ -4,7 +4,7 @@
  */
 import Abstract from '../../utils/request/abstract'
 
-class Basic extends Abstract {
+class Singer extends Abstract {
   /**
    * 登录
    * @param {string} account 用户
@@ -18,10 +18,38 @@ class Basic extends Abstract {
 
   /**
  * 登录
- * @method 获取轮播图数据
+ * @method 获取推荐歌手
  */
-  getBanner () {
-    return this.getReq({ url: 'Basic.getBanner' })
+  getRecommendSinger () {
+    return this.getReq({ url: 'Singer.getRecommendSinger' })
+  }
+
+  /**
+* @method 获取歌手列表
+*/
+  getSinger (params:any) {
+    return this.getReq({ url: 'Singer.getSinger', params })
+  }
+
+  /**
+* @method 获取歌手详情
+*/
+  getSingerDetail (params: any) {
+    return this.getReq({ url: 'Singer.getSingerDetail', params })
+  }
+
+  /**
+* @method 获取歌手的歌曲
+*/
+  getSingerSong (params: any) {
+    return this.getReq({ url: 'Singer.getSingerSong', params })
+  }
+
+  /**
+* @method 获取歌手的歌曲
+*/
+  getSingerAlbum (params: any) {
+    return this.getReq({ url: 'Singer.getSingerAlbum', params })
   }
 }
 
@@ -29,6 +57,6 @@ class Basic extends Abstract {
 let instance
 export default (() => {
   if (instance) return instance
-  instance = new Basic()
+  instance = new Singer()
   return instance
 })()

@@ -8,6 +8,7 @@
 <script lang="ts">
 import { defineComponent, reactive, onMounted, toRefs } from 'vue'
 import SongSheet from '@/components/SongSheet/index.vue'
+import { playlistApi } from '@/api/index'
 
 export default defineComponent({
   components: {
@@ -20,12 +21,14 @@ export default defineComponent({
     })
 
     // 获取首页推荐歌单
-    async function getPersonalized () {
-      // const res = await ctx.$api.getPersonalized(state.limit)
-      // state.sheetList = res.res
+    const getRecommendPlayList = async () => {
+      const res = await playlistApi.getRecommendedPlayList()
+      state.sheetList = res.data
     }
+
+    // 获取首页推荐歌单
     onMounted(() => {
-      getPersonalized()
+      getRecommendPlayList()
     })
     return { ...toRefs(state) }
   }

@@ -135,7 +135,7 @@ export default defineComponent({
     })
     const store = useStore()
     const router = useRouter()
-    const currentSong = computed(() => store.getters.currentSong)
+    const currentSong = computed(() => store.getters.currentSong || { id: 24 })
     const playing = computed(() => store.getters.playing)
     const userInfo = computed(() => store.getters.userInfo)
     const loginStatu = computed(() => store.getters.loginStatu)

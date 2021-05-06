@@ -150,6 +150,7 @@ import utils from '@/utils/utils'
 import ArtistList from '@/components/ArtistList/index.vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { playlistApi, songApi } from '@/api/index'
 
 export default defineComponent({
   components: {
@@ -221,16 +222,26 @@ export default defineComponent({
     // 获取歌单详情
     async function getPlayListDetail (id:string) {
       // const res = await ctx.$api.getPlayListDetail(id)
-      // if (res.res.description !== null) {
-      //   res.res.description = res.res.description.replace(
-      //     /(\r\n|\n|\r)/gm,
-      //     '<br />'
-      //   )
-      // }
-      // state.detail = res.res
-      // const str = res.res.songList.join(',')
-      // const result = await ctx.$api.getSonglist(str)
-      // state.songs = result.res
+      const res = await playlistApi.getPlaylistDetail({ id })
+      if (res.data.description !== null) {
+        res.data.description = res.data.description.replace(
+          /(\r\n|\n|\r)/gm,
+          '<br />'
+        )
+      }
+      state.detail = res.data
+      // 获取一组歌曲详情
+      const str = res.data.songList.join(',')
+      const result = await songApi.getSongDetail({ ids: str })
+      const songs:any = []
+      result.data.forEach((item:any) => {
+        const song = {
+          ...item.song
+        }
+        song.artist = song
+        songs.push(song)
+      })
+      ;(state.songs as any) = songs
     }
     // 获取相关歌单推荐
     async function getRelatedPlaylist (id:string) {

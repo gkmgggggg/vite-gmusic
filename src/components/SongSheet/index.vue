@@ -52,7 +52,7 @@ export default defineComponent({
     const numClass = computed(() => (props as any).num === 2 ? 'two' : 'eight')
 
     const toDetail = (item:any) => {
-      router.push(`/playlistdetail?id=${item.id}`)
+      router.push(`/playlist/detail?id=${item.id}`)
     }
 
     return { numClass, utils, toDetail }

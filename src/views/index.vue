@@ -25,6 +25,5 @@ export default defineComponent({
 .mainBody{
   height: 100%;
   padding: 20px 0;
-  border:1px solid red;
 }
 </style>

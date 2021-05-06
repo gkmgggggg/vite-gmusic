@@ -21,7 +21,7 @@
           ></i>
         </div>
         <div class="avatar">
-          <img :src="item.image + '?param=150y150'" />
+          <img :src="item.coverImgUrl + '?param=150y150'" />
           <!-- <el-image
             :key="item.image + '?param=150y150'"
             :src="item.image + '?param=150y150'"
@@ -45,9 +45,9 @@
             <span>{{ item.singer }}</span>
           </p>
         </div>
-        <p class="album">《{{ item.album }}》</p>
+        <p class="album">{{ item.artistId }}</p>
         <p class="duration transition">
-          {{ utils.formatSecondTime(item.duration) }}
+          {{ utils.formatTime(item.duration) }}
         </p>
       </div>
     </div>
@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue'
+import { defineComponent, watchEffect } from 'vue'
 import utils from '@/utils/utils'
 
 export default defineComponent({
@@ -64,11 +64,11 @@ export default defineComponent({
       type: Array
     }
   },
-  setup () {
-    const state = reactive({
-      currentIndex: 0
+  setup (props) {
+    watchEffect(() => {
+      console.log(props.songList)
     })
-    return { ...toRefs(state), utils }
+    return { utils }
   }
 })
 </script>

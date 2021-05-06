@@ -34,8 +34,13 @@ export default defineComponent({
       state.banner = res.data
     }
 
-    onMounted(() => {
+    const getData = async () => {
       getBanner()
+      // getRecommendPlayList()
+    }
+
+    onMounted(() => {
+      getData()
     })
 
     return { ...toRefs(state) }

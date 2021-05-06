@@ -33,15 +33,16 @@ class Abstract {
       }).then((res) => {
         // 200:服务端业务处理正常结束
         if (res.status === 200) {
-          if (res.data.success) {
-            resolve({ status: true, msg: 'success', data: res.data?.data, origin: res.data })
-          } else {
-            ElMessage.warning({
-              message: res.data?.errorMessage || (url + '请求失败'),
-              type: 'warning'
-            })
-            resolve({ status: false, msg: res.data?.errorMessage || (url + '请求失败'), data: res.data?.data, origin: res.data })
-          }
+          resolve({ status: true, msg: 'success', data: res.data, origin: res })
+          // if (res.success) {
+          //   resolve({ status: true, msg: 'success', data: res.data?.data, origin: res })
+          // } else {
+          //   ElMessage.warning({
+          //     message: res.data?.errorMessage || (url + '请求失败'),
+          //     type: 'warning'
+          //   })
+          //   resolve({ status: false, msg: res.data?.errorMessage || (url + '请求失败'), data: res.data?.data, origin: res })
+          // }
         } else {
           resolve({ status: false, msg: res.data?.errorMessage || (url + '请求失败'), data: null })
         }

@@ -6,6 +6,7 @@ import ElementPlus from 'element-plus'
 import 'element-plus/lib/theme-chalk/index.css'
 import './style/reset.css'
 import './style/common.css'
+// import './style/iconfont.css'
 // import './permission'
 
 const app = createApp(App)

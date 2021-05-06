@@ -38,6 +38,7 @@ import { defineComponent, onMounted, onUpdated, reactive } from 'vue'
 import SingerItem from '@/components/SingerItem/index.vue'
 import NiceLoading from '@/components/NiceLoading/index.vue'
 import LoadMore from '@/components/LoadMore/index.vue'
+import { singerApi } from '@/api/index'
 
 export default defineComponent({
   components: {
@@ -118,25 +119,6 @@ export default defineComponent({
       // 是否还有数据
       loadStatus: true
     })
-    // 获取筛选列表
-    function getEn () {
-      const ens = []
-      for (let i = 0; i < 26; i++) {
-        ens.push({
-          value: String.fromCharCode(97 + i),
-          label: String.fromCharCode(65 + i)
-        })
-      }
-      ens.unshift({
-        value: -1,
-        label: '热门'
-      })
-      ens.push({
-        value: 0,
-        label: '其他'
-      })
-      // state.ens = ens
-    }
     // 选择歌手分类
     function chooseType (type:string, val:number) {
       if (type === 'lang') {
@@ -146,35 +128,24 @@ export default defineComponent({
         state.classify = val
         state.params.type = val
       }
-      // else if (type == "en") {
-      //   state.en = val;
-      //   state.params.initial = val;
-      // }
       state.params.offset = 0
       state.loadStatus = true
       state.singers = []
+      console.log(state.params)
       getSingerList()
     }
     // 获取歌手列表
     async function getSingerList () {
-      // try {
-      //   state.loadStatus = false
-      //   const res = await ctx.$api.getSingerList(state.params)
-      //   if (res.code === 200) {
-      //     // console.log(res);
-      //     state.singers = state.singers.concat(res.res)
-      //     if (res.more) {
-      //       state.loading = true
-      //       state.loadStatus = true
-      //       state.params.offset += 40
-      //     } else {
-      //       state.loading = false
-      //     }
-      //   }
-      // } catch (error) {
-      //   console.log(error)
-      //   // this.$message.error(error);
-      // }
+      state.loadStatus = false
+      const res = await singerApi.getSinger(state.params)
+      state.singers = state.singers.concat(res.data.data)
+      if (res.data.hasMore) {
+        state.loading = true
+        state.loadStatus = true
+        state.params.offset += 40
+      } else {
+        state.loading = false
+      }
     }
     // 加载更多
     function load () {
@@ -186,11 +157,10 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      getEn()
       getSingerList()
     })
     onUpdated(() => {})
-    return { state, getEn, chooseType, getSingerList, load }
+    return { state, chooseType, getSingerList, load }
   }
 })
 </script>

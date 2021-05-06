@@ -47,18 +47,10 @@
         :page-size="limit"
         background
         hide-on-single-page
-        layout="total, prev, pager, next"
+        layout="prev, pager, next"
         :total="pageTotal"
       >
       </el-pagination>
-      <!-- <a-pagination
-        v-model:current="state.currentPage"
-        :total="state.pageTotal"
-        :pageSize="state.limit"
-        @showSizeChange="handleSizeChange"
-        @change="handleCurrentChange"
-        show-less-items
-      /> -->
     </div>
   </div>
 </template>
@@ -66,6 +58,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, reactive, toRefs } from 'vue'
 import SongSheet from '@/components/SongSheet/index.vue'
+import { playlistApi } from '@/api/index'
 
 export default defineComponent({
   components: {
@@ -143,86 +136,81 @@ export default defineComponent({
 
     // 获取歌单分类
     async function getCatList () {
-      // const res = await ctx.$api.getCatList()
-      // if (res.code === 200) {
-      //   state.categories = ['语种', '风格', '场景', '情感', '主题']
-      //   state.cateList = categoryGroup(res.res, 'category')
-      // }
+      const res = await playlistApi.getTag()
+      state.categories = ['语种', '风格', '场景', '情感', '主题'];
+      (state.cateList as any) = categoryGroup(res.data, 'category')
     }
     // 获取热门歌单分类
     async function getHotlist () {
-      // const res = await ctx.$api.getHotlist()
-      // if (res.code === 200) {
-      //   state.hotCategories = res.res
-      // }
+      const res = await playlistApi.getTag(-1)
+      state.hotCategories = res.data
     }
     // 获取歌单 默认全部
     async function getPlayList () {
-      // state.fullscreenLoading = true
-      // const param = {
-      //   cat: state.currentCat,
-      //   limit: state.limit,
-      //   offset: state.offset
-      // }
-      // const res = await ctx.$api.getPlayList(param)
-      // if (res.code === 200) {
-      //   state.playList = res.res
-      //   state.pageTotal = res.count
-      //   state.fullscreenLoading = false
-      // }
+      state.fullscreenLoading = true
+      const param = {
+        type: state.currentCat,
+        limit: state.limit,
+        offset: state.offset
+      }
+      const res = await playlistApi.getPlayList(param)
+      console.log(res)
+      state.playList = res.data.data
+      state.pageTotal = res.data.total
+      state.fullscreenLoading = false
     }
     // 根据分类进行分组
     function categoryGroup (list:any, field:any) {
-      // const obj = {}
-      // for (let i = 0; i < list.length; i++) {
-      //   for (const item in list[i]) {
-      //     if (item === field) {
-      //       obj[list[i][item]] = {
-      //         list: obj[list[i][field]] ? obj[list[i][field]].list : []
-      //       }
-      //     }
-      //   }
-      //   obj[list[i][field]].list.push(list[i])
-      // }
-      // const att = []
+      const obj = {}
+      for (let i = 0; i < list.length; i++) {
+        for (const item in list[i]) {
+          if (item === field) {
+            obj[list[i][item]] = {
+              list: obj[list[i][field]] ? obj[list[i][field]].list : []
+            }
+          }
+        }
+        obj[list[i][field]].list.push(list[i])
+      }
+      const att = []
 
-      // for (const item in obj) {
-      //   let type = ''
-      //   let category = ''
-      //   let icon = ''
-      //   state.typeList.map((jitem) => {
-      //     if (jitem.key == obj[item].list[0].category) {
-      //       type = jitem.value
-      //       category = jitem.key
-      //       icon = jitem.icon
-      //     }
-      //   })
-      //   att.push({
-      //     type,
-      //     category,
-      //     icon,
-      //     list: obj[item].list
-      //   })
-      // }
-      // return att
+      for (const item in obj) {
+        let type = ''
+        let category = ''
+        let icon = ''
+        state.typeList.map((jitem) => {
+          if (jitem.key == obj[item].list[0].category) {
+            type = jitem.value
+            category = jitem.key
+            icon = jitem.icon
+          }
+        })
+        att.push({
+          type,
+          category,
+          icon,
+          list: obj[item].list
+        })
+      }
+      return att
     }
 
-    onMounted(() => {
+    function getData () {
       getHotlist()
       getCatList()
       getPlayList()
+    }
+
+    onMounted(() => {
+      getData()
     })
     return {
       ...toRefs(state),
-      getCatList,
-      getHotlist,
-      getPlayList,
       handleSizeChange,
       handleCurrentChange,
       openFilter,
       chooseType,
-      chooseCat,
-      categoryGroup
+      chooseCat
     }
   }
 })

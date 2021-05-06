@@ -55,7 +55,6 @@
         <div class="content">
           <artist-list :songs="songs" :isPerson="isPerson" v-if="active == 1" />
           <album-list :albums="albums" v-if="active == 2" />
-          <mv-list :mvs="mvs" type="mv" v-if="active == 3" />
           <div class="info-box" v-if="active == 4">
             <h2 class="title">{{ detail.name }}简介</h2>
             <div class="profile" v-html="singerDesc.briefDesc"></div>
@@ -87,12 +86,11 @@
 </template>
 
 <script>
-// import { defineComponent } from 'vue'
 import Empty from '@/components/Empty/index.vue'
 import ArtistList from '@/components/ArtistList/index.vue'
 import AlbumList from './components/AlbumList.vue'
-import MvList from './components/MvLists.vue'
 import SingerItem from '@/components/SingerItem/index.vue'
+import { singerApi } from '@/api/index'
 
 export default ({
   data () {
@@ -124,10 +122,6 @@ export default ({
           id: 2
         },
         {
-          name: 'MV',
-          id: 3
-        },
-        {
           name: '歌手详情',
           id: 4
         },
@@ -147,7 +141,6 @@ export default ({
   },
   components: {
     ArtistList,
-    MvList,
     SingerItem,
     AlbumList,
     Empty
@@ -194,27 +187,23 @@ export default ({
     },
     // 获取歌手基本信息和热门50首单曲
     async getArtists (id) {
-      // try {
-      //   const res = await this.$api.getArtists(id)
-      //   if (res.code === 200) {
-      //     this.singerDetail = res.res
-      //     if (res.res.introduction.length > 0) {
-      //       res.res.introduction.map((item) => {
-      //         item.txt = item.txt.replace(/(\r\n|\n|\r)/gm, '<br />')
-      //       })
-      //     }
-      //     this.singerDesc = res.res
-      //   }
-      //   const result = await this.$api.getArtistSongs(id)
-      //   this.songs = result.res
-      //   for (const item of this.songs) {
-      //     item.duration = parseFloat(item.duration / 1000)
-      //   }
-      //   this.getArtistAlbum(id)
-      //   this.getArtistMv(id)
-      // } catch (error) {
-      //   console.log(error)
-      // }
+      const res = await singerApi.getSingerDetail({ id })
+      this.singerDetail = res.data
+      if (res.data.introduction.length > 0) {
+        res.data.introduction.map((item) => {
+          item.txt = item.txt.replace(/(\r\n|\n|\r)/gm, '<br />')
+          return item
+        })
+      }
+      this.singerDesc = res.data
+      const result = await singerApi.getSingerSong({ id })
+      result.data.forEach((item) => {
+        item.artist = this.singerDetail
+        item.duration = parseFloat(item.duration / 1000)
+      })
+      this.songs = result.data
+
+      this.getArtistAlbum(id)
     },
     // 获取(歌手)用户信息
     // async getUserDetail(uid) {
@@ -237,31 +226,11 @@ export default ({
     // },
     // 获取歌手专辑
     async getArtistAlbum (id) {
-      const params = {
-        id: id
-      }
-      try {
-        const res = await this.$api.getArtistAlbum(params)
-        if (res.code === 200) {
-          this.albums = res.res
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    // 获取歌手MV
-    async getArtistMv (id) {
-      const params = {
-        id: this.singerId || id
-      }
-      try {
-        const res = await this.$api.getArtistMv(params)
-        if (res.code === 200) {
-          this.mvs = res.res
-        }
-      } catch (error) {
-        console.log(error)
-      }
+      const res = await singerApi.getSingerAlbum({ id })
+      res.data.forEach(item => {
+        item.artist = this.singerDetail
+      })
+      this.albums = res.data
     },
     // 初始化
     _initialize (id) {
@@ -301,7 +270,7 @@ $color-theme: #fa2800;
       position: relative;
       width: 100%;
       height: 580px;
-      background: url("../assets/images/top-bg.jpg");
+      background: url("../../assets/images/top-bg.jpg");
       background-position: center;
       background-repeat: no-repeat;
       background-size: cover;
@@ -436,7 +405,7 @@ $color-theme: #fa2800;
         bottom: 0;
         width: 100%;
         height: 137px;
-        background: url("../assets/images/arrow-lr.png");
+        background: url("../../assets/images/arrow-lr.png");
         background-position: center;
         z-index: 1;
       }

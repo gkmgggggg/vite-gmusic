@@ -9,21 +9,35 @@ class PlayListApi extends Abstract {
    * @method 获取主页推荐歌单
    */
   getRecommendedPlayList () {
-    return this.getReq({ url: 'PlayList.getRecommended' })
+    return this.getReq({ url: 'Playlist.getRecommendPlaylist' })
   }
 
   /**
    * @method 根据条件获取歌单列表
    */
-  getPlayList () {
-    return this.getReq({ url: 'PlayList.getPlayList' })
+  getPlayList (params:any) {
+    return this.getReq({ url: 'Playlist.getPlayList', params })
   }
 
   /**
    * @method 获取歌单详情
    */
-  getPlayListDetail () {
-    return this.getReq({ url: 'PlayList.getPlayListDetail' })
+  getPlaylistDetail (params:any) {
+    return this.getReq({ url: 'Playlist.getPlaylistDetail', params })
+  }
+
+  /**
+ * @method 获取排行榜
+ */
+  getRank () {
+    return this.getReq({ url: 'Playlist.getRank' })
+  }
+
+  /**
+* @method 获取Tag
+*/
+  getTag (hot:number = 0) {
+    return this.getReq({ url: 'Playlist.getTag', params: { hot } })
   }
 }
 
