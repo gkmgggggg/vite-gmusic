@@ -1,5 +1,4 @@
-import * as basicTypes from './basic'
-
-export default {
-  ...basicTypes
-}
+export * from './basic'
+export * from './singer'
+export * from './playlist'
+export * from './user'

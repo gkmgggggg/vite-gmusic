@@ -6,7 +6,6 @@ export function _Swiper (oswiper) {
   const oRight = oSwiper.getElementsByClassName('right')[0]
   const aLi = oSwiper.querySelectorAll('li')
   const aSpan = document.querySelectorAll('.banner-span')
-  console.log(oSwiper)
 
   const aName = []
   let currentIndex = 0

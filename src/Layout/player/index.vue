@@ -1,6 +1,6 @@
 <template>
   <div>
-    登录页
+
   </div>
 </template>
 
@@ -14,6 +14,6 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 
 </style>

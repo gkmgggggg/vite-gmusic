@@ -1,5 +1,5 @@
 <template>
-  <div class="swiper" :ref="swiper" v-if="banner !== null">
+  <div class="swiper" :ref="swiper" v-if="banner">
     <div class="left">
       <div class="pre">
         <!-- <img src="@/assets/img/swiper/prev.svg" alt /> -->
@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from 'vue'
+import { defineComponent, onUpdated } from 'vue'
 import { _Swiper } from '../../../utils/common/indexSwiper'
 
 export default defineComponent({
@@ -41,9 +41,7 @@ export default defineComponent({
   props: {
     banner: {
       type: Array,
-      default () {
-        return []
-      }
+      default: () => []
     }
   },
   setup () {
@@ -51,12 +49,9 @@ export default defineComponent({
     const swiper = (el:any) => {
       itemRefs = el
     }
-    onMounted(() => {
-      console.log(itemRefs)
-      if (itemRefs) {
-        console.log(itemRefs)
-        _Swiper(itemRefs)
-      }
+
+    onUpdated(() => {
+      if (itemRefs) _Swiper(itemRefs)
     })
 
     return { swiper }

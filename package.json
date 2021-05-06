@@ -11,6 +11,7 @@
     "axios": "^0.21.1",
     "element-plus": "^1.0.2-beta.40",
     "js-cookie": "^2.2.1",
+    "qs": "^6.10.1",
     "vue": "^3.0.5",
     "vue-router": "^4.0.6",
     "vuex": "^4.0.0"
@@ -19,6 +20,7 @@
     "@types/jest": "^26.0.22",
     "@types/js-cookie": "^2.2.6",
     "@types/node": "^14.14.41",
+    "@types/qs": "^6.9.6",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
     "@vitejs/plugin-vue": "^1.2.1",

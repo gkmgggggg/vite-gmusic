@@ -11,8 +11,8 @@
 <script>
 export default {
   components: {},
-  setup() {},
-};
+  setup () {}
+}
 </script>
 <style lang="scss" scoped>
 .error-wrap {

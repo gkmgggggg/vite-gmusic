@@ -3,7 +3,8 @@ import getUrl from './urlDict'
 // import storage from '@/utils/storage'
 import instance from './axios'
 import { AxiosRequest, CustomResponse } from './types'
-import { getToken } from '../auth'
+// import { getToken } from '../auth'
+import { ElMessage } from 'element-plus'
 
 class Abstract {
   protected baseURL: string = import.meta.env.VITE_BASE_URL as string
@@ -24,7 +25,6 @@ class Abstract {
     return new Promise((resolve, reject) => {
       instance({
         baseURL,
-        headers,
         method,
         url,
         params,
@@ -36,7 +36,10 @@ class Abstract {
           if (res.data.success) {
             resolve({ status: true, msg: 'success', data: res.data?.data, origin: res.data })
           } else {
-            // Vue.prototype.$message({ type: 'error', message: res.data?.errorMessage || (url + '请求失败') })
+            ElMessage.warning({
+              message: res.data?.errorMessage || (url + '请求失败'),
+              type: 'warning'
+            })
             resolve({ status: false, msg: res.data?.errorMessage || (url + '请求失败'), data: res.data?.data, origin: res.data })
           }
         } else {
@@ -44,7 +47,10 @@ class Abstract {
         }
       }).catch((err) => {
         const msg = err?.data?.errorMessage || err?.msg || (url + '请求失败')
-        // Vue.prototype.$toast({ msg })
+        ElMessage.warning({
+          message: msg,
+          type: 'warning'
+        })
         // eslint-disable-next-line
         reject({ status: false, msg, data: null });
       })

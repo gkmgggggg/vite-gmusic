@@ -63,7 +63,7 @@ instance.interceptors.response.use(
 
     removePending(response.config)
 
-    return response
+    return response.data
   },
   error => {
     loadingInstance.close()

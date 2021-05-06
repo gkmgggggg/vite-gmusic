@@ -4,9 +4,9 @@
  */
 import Abstract from '../../utils/request/abstract'
 
-class Basic extends Abstract {
+class DemoApi extends Abstract {
   /**
-   * 登录
+   * @method 登录
    * @param {string} account 用户
    * @param {string} password 密码
    * @param {string} captchaCode 图形码
@@ -29,6 +29,6 @@ class Basic extends Abstract {
 let instance
 export default (() => {
   if (instance) return instance
-  instance = new Basic()
+  instance = new DemoApi()
   return instance
 })()

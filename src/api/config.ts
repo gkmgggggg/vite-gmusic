@@ -7,7 +7,7 @@ interface UrlDictType {
 const urlDict: UrlDictType = {
   Basic: {
     AuthLogin: 'userDomain/admin/v1/user/login', // 登录
-    getBanner: 'api/banner'
+    getBanner: '/banner'
   }
 }
 
