@@ -32,7 +32,7 @@
           v-for="(item, index) of songs"
           :key="item.id + index"
           :class="currentSong.id == item.id && playing ? 'playing' : ''"
-          @dblclick="playSong(item, index)"
+          @dblclick="playSong(index)"
         >
           <td>
             <div class="index-container flex-center">
@@ -46,7 +46,7 @@
               </div>
               <i
                 class="iconfont nicebofang2 play-btn"
-                @click="playSong(item, index)"
+                @click="playSong( index)"
               ></i>
               <i
                 class="iconfont nicezanting1 pause-btn"

@@ -235,10 +235,11 @@ export default defineComponent({
       const result = await songApi.getSongDetail({ ids: str })
       const songs:any = []
       result.data.forEach((item:any) => {
+        item.song.duration /= 1000
         const song = {
           ...item.song
         }
-        song.artist = song
+        song.artist = item.artist
         songs.push(song)
       })
       ;(state.songs as any) = songs

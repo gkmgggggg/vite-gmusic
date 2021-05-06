@@ -8,8 +8,10 @@
     "test": "jest"
   },
   "dependencies": {
+    "ant-design-vue": "^1.7.4",
     "axios": "^0.21.1",
     "element-plus": "^1.0.2-beta.40",
+    "good-storage": "^1.1.1",
     "js-cookie": "^2.2.1",
     "qs": "^6.10.1",
     "vue": "^3.0.5",

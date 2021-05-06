@@ -51,14 +51,7 @@ export default defineComponent({
     }
   },
   components: { NiceLoading },
-  computed: {
-    // noMore () {
-    //   return !this.loading
-    // },
-    // disabled () {
-    //   return this.loading || this.noMore
-    // }
-  },
+  computed: {},
   watch: {},
   methods: {
     toDetail (id:string) {
