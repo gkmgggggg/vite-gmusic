@@ -113,6 +113,7 @@ import utils from '@/utils/utils'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import { userApi } from '@/api/index'
 
 export default defineComponent({
   props: {
@@ -142,19 +143,26 @@ export default defineComponent({
     const collectText = computed(() => state.subscribed ? '已收藏' : '收藏')
     // 获取歌单信息
     async function getInfo () {
-      // if (loginStatu.value === false) {
-      //   state.subscribed = false
-      //   return
-      // }
-      // const { id } = router.currentRoute.value.query
-      // const res = await ctx.$api.isCollected(userInfo.value._id, id)
-      // if (res.code == 200) {
-      //   if (res.flag == true) state.subscribed = true
-      //   else state.subscribed = false
-      // } else {
-      //   state.subscribed = false
-      //   // ctx.$message.warning("好像出现了一些问题...");
-      // }
+      if (loginStatu.value === false) {
+        state.subscribed = false
+      }
+      const { id } = router.currentRoute.value.query
+      const collectIds = await getUserPlaylist(userInfo.value._id)
+      state.subscribed = collectIds.indexOf(Number(id)) !== -1
+
+      const collectSongIds = await getUserSong(userInfo.value._id)
+      props.songs?.forEach((item:any) => { item.isCollected = collectSongIds.indexOf(item.id) !== -1 })
+    }
+
+    // 获取用户收藏的歌单id
+    async function getUserPlaylist (id:string) {
+      const res = await userApi.getUserPlaylist({ id })
+      return res.data.map((item:any) => item.id)
+    }
+    // 获取用户收藏的歌曲id
+    async function getUserSong (id:string) {
+      const res = await userApi.getUserSong({ id })
+      return res.data.map((item:any) => item.song.id)
     }
     // 播放歌曲
     function playSong (index:number) {
@@ -177,23 +185,22 @@ export default defineComponent({
         })
         return
       }
-      // const { id } = router.currentRoute.value.query
+      const { id } = router.currentRoute.value.query
+
       if (!state.subscribed) {
-        // const res = await ctx.$api.collectPlayList(userInfo.value._id, id)
-        // state.subscribed = true
-        // ElMessage.success({
-        //   message: '收藏成功!!!',
-        //   type: 'success'
-        // })
+        await userApi.collectPlaylist({ uid: userInfo.value.account, pid: id })
+        state.subscribed = true
+        ElMessage.success({
+          message: '收藏成功!!!',
+          type: 'success'
+        })
       } else {
-        // const res = await ctx.$api.deletePlayList(userInfo.value._id, id)
-        // if (res.code === 200) {
-        //   state.subscribed = false
-        //   ElMessage.success({
-        //     message: '已取消收藏!!!',
-        //     type: 'success'
-        //   })
-        // }
+        await userApi.deletePlaylist({ uid: userInfo.value._id, pid: id })
+        state.subscribed = false
+        ElMessage.success({
+          message: '取消收藏成功!!!',
+          type: 'success'
+        })
       }
     }
     // 收藏歌曲
@@ -203,27 +210,23 @@ export default defineComponent({
           message: '请先登录！！！',
           type: 'warning'
         })
-        // ctx.$message.warning("请先登录！！！");
         return
       }
+
       if (!item.isCollected) {
-        // const res = await ctx.$api.collectSong(userInfo.value._id, item.id)
-        // if (res.code == 200) {
-        //   item.isCollected = true
-        //   ElMessage.success({
-        //     message: '收藏成功!!!',
-        //     type: 'success'
-        //   })
-        // }
+        await userApi.collectSong({ uid: userInfo.value.account, sid: item.id })
+        item.isCollected = true
+        ElMessage.success({
+          message: '收藏成功!!!',
+          type: 'success'
+        })
       } else {
-        // const res = await ctx.$api.deletetSong(userInfo.value._id, item.id)
-        // if (res.code == 200) {
-        //   item.isCollected = false
-        //   ElMessage.success({
-        //     message: '已取消收藏!!!',
-        //     type: 'success'
-        //   })
-        // }
+        await userApi.deleteSong({ uid: userInfo.value._id, sid: item.id })
+        item.isCollected = false
+        ElMessage.success({
+          message: '已取消收藏!!!',
+          type: 'success'
+        })
       }
     }
     // 下载歌曲
@@ -231,7 +234,7 @@ export default defineComponent({
       return id
     }
     onMounted(() => {
-      if (loginStatu.value === true && props.isPerson === false) getInfo()
+      if (loginStatu.value && !props.isPerson) getInfo()
     })
 
     return {
@@ -243,6 +246,8 @@ export default defineComponent({
       pauseSong,
       playAllSongs,
       collect,
+      getUserPlaylist,
+      getUserSong,
       collectText,
       store,
       currentSong,

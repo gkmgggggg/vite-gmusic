@@ -4,7 +4,7 @@
  */
 import Abstract from '../../utils/request/abstract'
 
-class Singer extends Abstract {
+class SingerApi extends Abstract {
   /**
    * 登录
    * @param {string} account 用户
@@ -57,6 +57,6 @@ class Singer extends Abstract {
 let instance
 export default (() => {
   if (instance) return instance
-  instance = new Singer()
+  instance = new SingerApi()
   return instance
 })()

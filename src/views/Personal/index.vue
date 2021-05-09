@@ -125,10 +125,11 @@ export default defineComponent({
       type: 1,
       userProfile: {}
     })
-    const userInfo = computed(() => store.getters.userInfo)
-    // 登录用户信息
     const store = useStore()
     const router = useRouter()
+
+    // 登录用户信息
+    const userInfo = computed(() => store.getters.userInfo)
     const loginStatu = computed(() => store.getters.loginStatu)
 
     // 获取当前页用户信息
@@ -142,21 +143,25 @@ export default defineComponent({
     async function getUserPlaylist (id:string) {
       const res = await userApi.getUserPlaylist({ id })
       state.collectList = res.data
+      console.log(res)
     }
     // 获取用户收藏的歌曲
     async function getUserSong (id:string) {
       const res = await userApi.getUserSong({ id })
-      for (const item of res.data) {
-        item.duration = parseFloat(item.duration / 1000)
-      }
-      state.songs = res.data
-    }
-    onMounted(() => {
-      // if (loginStatu.value) {
-      //   getUserPlaylist(userInfo.value.account)
-      //   getUserSong(userInfo.value.account)
+      const songs:any = []
+      res.data.forEach((item:any) => {
+        item.song.duration /= 1000
+        const song = { ...item.song }
+        song.artist = item.artist
+        songs.push(song)
+      })
+      state.songs = songs
+      // for (const item of res.data) {
+      //   item.duration = parseFloat(item.duration / 1000)
       // }
-    })
+      // state.songs = res.data
+    }
+    onMounted(() => {})
     onUpdated(() => {})
     return {
       ...toRefs(state),

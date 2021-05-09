@@ -32,6 +32,11 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.recommend-music {
+  .title {
+    text-align: left;
+    margin: 0 0 15px 0;
+  }
+}
 </style>

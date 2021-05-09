@@ -4,7 +4,7 @@
  */
 import Abstract from '../../utils/request/abstract'
 
-class Basic extends Abstract {
+class User extends Abstract {
   /**
    * @method 用户登录
    * @param {string} account 用户
@@ -46,12 +46,44 @@ class Basic extends Abstract {
   getUserPlaylist (params: any) {
     return this.getReq({ url: 'User.getUserPlaylist', params })
   }
+
+  /**
+* @method 用户收藏歌单
+* @param {string} account 用户
+*/
+  collectPlaylist (data: any) {
+    return this.postReq({ url: 'User.collectPlaylist', data })
+  }
+
+  /**
+* @method 用户收藏歌曲
+* @param {string} account 用户
+*/
+  collectSong (data: any) {
+    return this.postReq({ url: 'User.collectSong', data })
+  }
+
+  /**
+* @method 用户取消收藏歌曲
+* @param {string} account 用户
+*/
+  deleteSong (data: any) {
+    return this.postReq({ url: 'User.deleteSong', data })
+  }
+
+  /**
+* @method 用户取消收藏歌曲
+* @param {string} account 用户
+*/
+  deletePlaylist (data: any) {
+    return this.postReq({ url: 'User.deletePlaylist', data })
+  }
 }
 
 // 单列模式返回对象
 let instance
 export default (() => {
   if (instance) return instance
-  instance = new Basic()
+  instance = new User()
   return instance
 })()

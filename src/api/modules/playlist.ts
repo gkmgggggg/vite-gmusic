@@ -4,7 +4,7 @@
  */
 import Abstract from '../../utils/request/abstract'
 
-class PlayListApi extends Abstract {
+class PlaylistApi extends Abstract {
   /**
    * @method 获取主页推荐歌单
    */
@@ -45,6 +45,6 @@ class PlayListApi extends Abstract {
 let instance
 export default (() => {
   if (instance) return instance
-  instance = new PlayListApi()
+  instance = new PlaylistApi()
   return instance
 })()

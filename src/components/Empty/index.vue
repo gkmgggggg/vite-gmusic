@@ -1,6 +1,6 @@
 <template>
   <div class="empty flex-column">
-    <img src="/../assets/images/empty.png" alt="" />
+    <img src="../../assets/images/empty.png" alt="" />
     <p>{{ emptyText }}</p>
   </div>
 </template>

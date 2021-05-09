@@ -38,7 +38,10 @@
           :class="mutedIcon"
         ></i>
         <div class="progress-bar">
-          <el-slider v-model="volumeNum"></el-slider>
+          <el-slider
+            v-model="volumeNum"
+            @input="changeVolume">
+          </el-slider>
           <!-- <a-slider
            :value="volumeNum"
             style="width: 100%"
@@ -220,25 +223,13 @@ export default {
       return store.getters.playList
     })
     const currentSong = computed(() => store.getters.currentSong)
-    const playing = computed(() => {
-      return store.getters.playing
-    })
-    const currentIndex = computed(() => {
-      return store.getters.currentIndex
-    })
-    const mode = computed(() => {
-      return store.getters.mode
-    })
-    const sequenceList = computed(() => {
-      return store.getters.sequenceList
-    })
-    const historyList = computed(() => {
-      return store.getters.historyList
-    })
+    const playing = computed(() => store.getters.playing)
+    const currentIndex = computed(() => store.getters.currentIndex)
+    const mode = computed(() => store.getters.mode)
+    const sequenceList = computed(() => store.getters.sequenceList)
+    const historyList = computed(() => store.getters.historyList)
     // 播放暂停按钮
-    const playIcon = computed(() => {
-      return playing.value ? 'nicezanting1' : 'nicebofang2'
-    })
+    const playIcon = computed(() => playing.value ? 'nicezanting1' : 'nicebofang2')
     // 播放模式
     const modeIcon = computed(() => {
       return mode.value === playMode.sequence
@@ -248,13 +239,9 @@ export default {
           : 'nicebofangqisuijibofang'
     })
     // 是否静音
-    const mutedIcon = computed(() => {
-      return state.isMuted ? 'nicejingyin1' : 'niceshengyin1'
-    })
+    const mutedIcon = computed(() => state.isMuted ? 'nicejingyin1' : 'niceshengyin1')
     // 进度条
-    const percent = computed(() => {
-      return state.currentTime / currentSong.value.duration
-    })
+    const percent = computed(() => state.currentTime / currentSong.value.duration)
     // 清空历史播放列表
     function clearHistory () {
       store.dispatch('clearHistoryList')

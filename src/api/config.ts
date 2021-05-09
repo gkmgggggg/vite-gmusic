@@ -7,14 +7,17 @@ interface UrlDictType {
 const urlDict: UrlDictType = {
   Basic: {
     getBanner: '/banner' // 获取轮播图数据
-    // getTag: '/tag' // 获取
   },
   User: {
     authLogin: '/user/login',
     authRegister: '/user/register',
     getUserInfo: '/user/info',
     getUserSong: '/user/collectSong',
-    getUserPlaylist: '/user/collectPlaylist'
+    getUserPlaylist: '/user/collectPlaylist',
+    collectSong: 'user/collect/song',
+    collectPlaylist: 'user/collect/playlist',
+    deleteSong: 'user/delete/song',
+    deletePlaylist: 'user/delete/playlist'
   },
   Singer: {
     getSinger: '/singer/list',
