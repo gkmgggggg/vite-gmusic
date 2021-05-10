@@ -6,22 +6,17 @@ import Abstract from '../../utils/request/abstract'
 
 class BasicApi extends Abstract {
   /**
-   * 登录
-   * @param {string} account 用户
-   * @param {string} password 密码
-   * @param {string} captchaCode 图形码
-   * @param {string} captchaCodeToken 图形码token
-   */
-  // authLogin (data: AuthLoginType) {
-  //   return this.getReq({ url: 'Basic.AuthLogin', data })
-  // }
-
-  /**
- * 登录
  * @method 获取轮播图数据
  */
   getBanner () {
     return this.getReq({ url: 'Basic.getBanner' })
+  }
+
+  /**
+* @method 获得搜索结果
+*/
+  search (params:any) {
+    return this.getReq({ url: 'Basic.search', params })
   }
 }
 

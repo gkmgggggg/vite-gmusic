@@ -83,7 +83,7 @@
                 />
               </div>
             </div>
-            <!-- <div class="search-hot" v-show="searchHistory.length > 0">
+            <div class="search-hot" v-show="searchHistory.length > 0">
               <div class="title flex-row">
                 <i class="iconfont nicelishi"></i>
                 <span>历史搜索</span>
@@ -100,7 +100,7 @@
                   ></a>
                 </li>
               </ul>
-            </div> -->
+            </div>
           </div>
           <div class="btn-close flex-center" @click="closeSearchPop">
             <span class="close-light"></span>

@@ -100,6 +100,15 @@ export const appRouter = [{
         title: '个人主页'
       },
       component: () => import('@/views/Personal/index.vue')
+    },
+    // 搜索页面
+    {
+      path: '/search',
+      name: 'search',
+      meta: {
+        title: '搜索结果'
+      },
+      component: () => import('@/views/Search/index.vue')
     }
   ]
 },

@@ -67,7 +67,7 @@
           <td>
             <div class="artist-container">
               <p class="author ellipsis">
-                <span v-if="item.artist !== null">{{ item.artist.name }}</span>
+                <span v-if="item.artist">{{ item.artist.name }}</span>
                 <span v-else>未知歌手</span>
               </p>
             </div>

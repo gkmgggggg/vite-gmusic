@@ -109,7 +109,7 @@
           plain
           size="mini"
           style="margin-top: 5px"
-          @click="submitComment(this.$router.query.id)"
+          @click="submitComment(route.query.id)"
           >提交评论</el-button
         >
         <!-- <button class="submit_btn">提交评论</button> -->
@@ -120,15 +120,15 @@
         </div>
         <ul v-if="comments.length > 0">
           <li class="item" v-for="item of comments" :key="item.time">
-            <!-- <div class="avatar" @click="toUser(item.user.userId)">
+            <div class="avatar" @click="toUser(item.user._id)">
               <img
-                :src="item.user.avatarUrl + '?param=150y150'"
+                :src="item.user.avatarUrl"
                 :alt="item.user.nickname"
                 :title="item.user.nickname"
               />
-            </div> -->
+            </div>
             <div class="info">
-              <h2 @click="toUser(item.user.userId)">
+              <h2 @click="toUser(item.user._id)">
                 {{ item.user.nickname
                 }}<small> · {{ utils.formatMsgTime(item.time) }}</small>
               </h2>
@@ -149,8 +149,9 @@ import { defineComponent, ref, reactive, computed, toRefs } from 'vue'
 import utils from '@/utils/utils'
 import ArtistList from '@/components/ArtistList/index.vue'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
-import { playlistApi, songApi } from '@/api/index'
+import { useRoute, useRouter } from 'vue-router'
+import { playlistApi, songApi, userApi } from '@/api/index'
+import { ElMessage } from 'element-plus'
 
 export default defineComponent({
   components: {
@@ -208,6 +209,7 @@ export default defineComponent({
     })
     const store = useStore()
     const router = useRouter()
+    const route = useRoute()
     const loginStatu = computed(() => store.getters.loginStatu)
     const userInfo = computed(() => store.getters.userInfo)
     // 标签跳转
@@ -264,20 +266,17 @@ export default defineComponent({
       // }
     }
     // 获取评论
-    async function getCommentPlaylist (id:string) {
-      // const params = {
-      //   id,
-      //   limit: 28,
-      //   offset: 0
-      // }
-      // const res = await ctx.$api.getCommentPlaylist(params)
-      // if (res.code === 200) {
-      //   if (res.hotComments.length > 0) {
-      //     state.comments = res.hotComments
-      //   } else {
-      //     state.comments = res.comments
-      //   }
-      // }
+    async function getCommentlist (id:string) {
+      const params = {
+        id
+        // limit: 20,
+        // offset: 0
+      }
+      const res = await playlistApi.getComment(params)
+      if (res.status) {
+        state.comments = res.data
+        console.log(res.data)
+      }
     }
     // 打开歌单介绍详情
     function openDesc (title:string, content:string) {
@@ -295,33 +294,54 @@ export default defineComponent({
     // 歌手详情
     function toUser (id:string) {
       console.log(id)
-      // this.$router.push({
-      //   name: "personal",
-      //   query: {
-      //     id,
-      //   },
-      // });
+      router.push({
+        name: 'personal',
+        query: {
+          id
+        }
+      })
+      // this.$router.push()
     }
     // 初始化
     function initialize (id:string) {
       getPlayListDetail(id)
+      getCommentlist(id)
       // getRelatedPlaylist(id);
       // getSubscribersPlaylist(id);
-      // getCommentPlaylist(id);
     }
 
-    function submitComment (id:string) {
-      console.log(userInfo)
-      console.log(id)
-      console.log(state.comment)
+    async function submitComment (id:string) {
+      if (!loginStatu) {
+        ElMessage.warning({
+          message: '请先登录!!!',
+          type: 'warning'
+        })
+        return
+      }
+      if (!state.comment) {
+        ElMessage.warning({
+          message: '评论内容不为空',
+          type: 'warning'
+        })
+        return
+      }
+      const res = await userApi.postComment({ uid: userInfo.value._id, pid: id, content: state.comment })
+      if (res.status) {
+        ElMessage.success({
+          message: '评论成功!!!',
+          type: 'success'
+        })
+        getCommentlist(id)
+      }
     }
     return {
       ...toRefs(state),
+      route,
       utils,
       tag,
       getPlayListDetail,
       getSubscribersPlaylist,
-      getCommentPlaylist,
+      getCommentlist,
       openDesc,
       toDetail,
       toUser,

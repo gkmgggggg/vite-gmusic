@@ -6,7 +6,8 @@ interface UrlDictType {
 
 const urlDict: UrlDictType = {
   Basic: {
-    getBanner: '/banner' // 获取轮播图数据
+    getBanner: '/banner', // 获取轮播图数据
+    search: '/search'
   },
   User: {
     authLogin: '/user/login',
@@ -14,10 +15,11 @@ const urlDict: UrlDictType = {
     getUserInfo: '/user/info',
     getUserSong: '/user/collectSong',
     getUserPlaylist: '/user/collectPlaylist',
-    collectSong: 'user/collect/song',
-    collectPlaylist: 'user/collect/playlist',
-    deleteSong: 'user/delete/song',
-    deletePlaylist: 'user/delete/playlist'
+    collectSong: '/user/collect/song',
+    collectPlaylist: '/user/collect/playlist',
+    deleteSong: '/user/delete/song',
+    deletePlaylist: '/user/delete/playlist',
+    postComment: '/user/postComment'
   },
   Singer: {
     getSinger: '/singer/list',
@@ -32,7 +34,8 @@ const urlDict: UrlDictType = {
     getSongDetail: '',
     getRecommendPlaylist: '/playlist/recommend', // 获取首页推荐歌单
     getRank: '/playlist/rank',
-    getTag: '/playlist/tag'
+    getTag: '/playlist/tag',
+    getComment: '/playlist/comment'
   },
   Song: {
     getRecommendSong: '/song/recommend', // 获取首页推荐歌曲

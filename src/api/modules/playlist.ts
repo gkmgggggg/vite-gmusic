@@ -39,6 +39,13 @@ class PlaylistApi extends Abstract {
   getTag (hot:number = 0) {
     return this.getReq({ url: 'Playlist.getTag', params: { hot } })
   }
+
+  /**
+* @method 获取歌单评论s
+*/
+  getComment (params:any) {
+    return this.getReq({ url: 'Playlist.getComment', params })
+  }
 }
 
 // 单列模式返回对象

@@ -55,12 +55,13 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted, reactive, toRefs } from 'vue'
+<script>
+import { onMounted, reactive, toRefs } from 'vue'
 import SongSheet from '@/components/SongSheet/index.vue'
 import { playlistApi } from '@/api/index'
+import { useRoute } from 'vue-router'
 
-export default defineComponent({
+export default ({
   components: {
     SongSheet
   },
@@ -106,13 +107,14 @@ export default defineComponent({
       ],
       fullscreenLoading: false
     })
+    const route = useRoute()
 
-    function handleSizeChange (val:number) {
+    function handleSizeChange (val) {
       state.limit = val
       state.offset = state.limit * state.currentPage
       getPlayList()
     }
-    function handleCurrentChange (val:number) {
+    function handleCurrentChange (val) {
       state.currentPage = val
       state.offset = (val - 1) * state.limit
       getPlayList()
@@ -120,14 +122,8 @@ export default defineComponent({
     function openFilter () {
       state.showFilter = !state.showFilter
     }
-    // 选择最新或者热门
-    function chooseType (type:string) {
-      state.currentPage = 1
-      state.sortType = type
-      getPlayList()
-    }
     // 选择分类
-    function chooseCat (cat:string) {
+    function chooseCat (cat) {
       state.currentPage = 1
       state.offset = 0
       state.currentCat = cat
@@ -137,13 +133,14 @@ export default defineComponent({
     // 获取歌单分类
     async function getCatList () {
       const res = await playlistApi.getTag()
-      state.categories = ['语种', '风格', '场景', '情感', '主题'];
-      (state.cateList as any) = categoryGroup(res.data, 'category')
+      state.categories = ['语种', '风格', '场景', '情感', '主题']
+      state.cateList = categoryGroup(res.data, 'category')
     }
     // 获取热门歌单分类
     async function getHotlist () {
       const res = await playlistApi.getTag(-1)
-      state.hotCategories = res.data
+      state.hotCategories = [{ name: '全部' }].concat(res.data)
+      console.log(state.hotCategories)
     }
     // 获取歌单 默认全部
     async function getPlayList () {
@@ -160,7 +157,7 @@ export default defineComponent({
       state.fullscreenLoading = false
     }
     // 根据分类进行分组
-    function categoryGroup (list:any, field:any) {
+    function categoryGroup (list, field) {
       const obj = {}
       for (let i = 0; i < list.length; i++) {
         for (const item in list[i]) {
@@ -178,8 +175,9 @@ export default defineComponent({
         let type = ''
         let category = ''
         let icon = ''
-        state.typeList.map((jitem) => {
-          if (jitem.key == obj[item].list[0].category) {
+        // eslint-disable-next-line array-callback-return
+        state.typeList.map(jitem => {
+          if (jitem.key === obj[item].list[0].category) {
             type = jitem.value
             category = jitem.key
             icon = jitem.icon
@@ -196,8 +194,13 @@ export default defineComponent({
     }
 
     function getData () {
+      const cat = route.query.cat
       getHotlist()
       getCatList()
+      if (cat) {
+        chooseCat(cat)
+        return
+      }
       getPlayList()
     }
 
@@ -209,7 +212,6 @@ export default defineComponent({
       handleSizeChange,
       handleCurrentChange,
       openFilter,
-      chooseType,
       chooseCat
     }
   }
