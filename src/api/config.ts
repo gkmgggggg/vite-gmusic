@@ -19,7 +19,8 @@ const urlDict: UrlDictType = {
     collectPlaylist: '/user/collect/playlist',
     deleteSong: '/user/delete/song',
     deletePlaylist: '/user/delete/playlist',
-    postComment: '/user/postComment'
+    postComment: '/user/postComment',
+    postPlaylist: '/user/postPlaylist'
   },
   Singer: {
     getSinger: '/singer/list',
@@ -35,7 +36,9 @@ const urlDict: UrlDictType = {
     getRecommendPlaylist: '/playlist/recommend', // 获取首页推荐歌单
     getRank: '/playlist/rank',
     getTag: '/playlist/tag',
-    getComment: '/playlist/comment'
+    getComment: '/playlist/comment',
+    addSong: '/playlist/addSong',
+    getCreatePlaylist: '/playlist/created'
   },
   Song: {
     getRecommendSong: '/song/recommend', // 获取首页推荐歌曲

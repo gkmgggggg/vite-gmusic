@@ -219,7 +219,7 @@ export default defineComponent({
       window.localStorage.removeItem('userInfo')
       window.localStorage.removeItem('token')
       window.localStorage.removeItem('Authorization')
-      window.localStorage.setItem('loginStatu', '0')
+      window.localStorage.setItem('loginStatu', 'false')
       store.commit('SET_LOGINSTATU', false)
 
       setTimeout(() => {

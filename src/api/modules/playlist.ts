@@ -46,6 +46,20 @@ class PlaylistApi extends Abstract {
   getComment (params:any) {
     return this.getReq({ url: 'Playlist.getComment', params })
   }
+
+  /**
+* @method 歌单添加歌曲
+*/
+  addSong (params: any) {
+    return this.getReq({ url: 'Playlist.addSong', params })
+  }
+
+  /**
+* @method 获取创建的歌单
+*/
+  getCreatePlaylist (params: any) {
+    return this.getReq({ url: 'Playlist.getCreatePlaylist', params })
+  }
 }
 
 // 单列模式返回对象

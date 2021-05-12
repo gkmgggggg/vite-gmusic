@@ -86,18 +86,19 @@
               <p>
                 {{ utils.formatSecondTime(item.duration) }}
               </p>
-              <div class="song-tools" v-if="!isPersonal">
+              <div class="song-tools" v-if="!isPersonal" style="display:flex;align-items:center">
                 <i
                   class="iconfont niceicon-heart"
                   title="喜欢"
                   @click="collectSong(item)"
                   :class="{ collected: item.isCollected }"
                 ></i>
-                <i
+                <i class="el-icon-folder-add" @click="addToPlayList(item.id)"></i>
+                <!-- <i
                   class="iconfont nicexiazai"
                   title="下载"
                   @click="downloadSong(item.id)"
-                ></i>
+                ></i> -->
               </div>
             </div>
           </td>
@@ -105,6 +106,18 @@
       </tbody>
     </table>
   </div>
+
+  <el-dialog title="选择歌单" v-model="dialogTableVisible">
+    <div>
+      <el-checkbox v-for="(item,index) in playlist" :key="item+index" v-model="item.value" :label="item.name" border></el-checkbox>
+    </div>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogTableVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addSong()">确 定</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts">
@@ -113,7 +126,7 @@ import utils from '@/utils/utils'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import { userApi } from '@/api/index'
+import { playlistApi, userApi } from '@/api/index'
 
 export default defineComponent({
   props: {
@@ -132,7 +145,10 @@ export default defineComponent({
   components: {},
   setup (props) {
     const state = reactive({
-      subscribed: false
+      subscribed: false,
+      dialogTableVisible: false,
+      playlist: [],
+      sid: ''
     })
     const store = useStore()
     const router = useRouter()
@@ -143,8 +159,9 @@ export default defineComponent({
     const collectText = computed(() => state.subscribed ? '已收藏' : '收藏')
     // 获取歌单信息
     async function getInfo () {
-      if (loginStatu.value === false) {
+      if (String(loginStatu.value) === 'false') {
         state.subscribed = false
+        return
       }
       const { id } = router.currentRoute.value.query
       const collectIds = await getUserPlaylist(userInfo.value._id)
@@ -178,7 +195,7 @@ export default defineComponent({
     }
     // 收藏或取消歌单
     async function collect () {
-      if (loginStatu.value === false) {
+      if (String(loginStatu.value) === 'false') {
         ElMessage.warning({
           message: '请先登录！！！',
           type: 'warning'
@@ -205,7 +222,7 @@ export default defineComponent({
     }
     // 收藏歌曲
     async function collectSong (item:any) {
-      if (loginStatu.value === false) {
+      if (String(loginStatu.value) === 'false') {
         ElMessage.warning({
           message: '请先登录！！！',
           type: 'warning'
@@ -233,8 +250,37 @@ export default defineComponent({
     function downloadSong (id:string) {
       return id
     }
+
+    async function addToPlayList (sid:string) {
+      if (String(loginStatu.value) === 'false') {
+        ElMessage.warning({
+          message: '请先登录！！！',
+          type: 'warning'
+        })
+        return
+      }
+      // 获取所创建的歌单列表
+      const res = await playlistApi.getCreatePlaylist({ uid: userInfo.value._id })
+      // eslint-disable-next-line no-return-assign
+      res.data.forEach((item:any) => { item.value = false })
+      state.playlist = res.data
+      state.sid = sid
+      state.dialogTableVisible = true
+    }
+
+    async function addSong () {
+      const pids = state.playlist.filter((item:any) => item.value === true).map((item:any) => item._id).join(',')
+      // 添加歌曲
+      playlistApi.addSong({ pids, sid: state.sid })
+      state.dialogTableVisible = false
+      ElMessage.success({
+        message: '已取消收藏!!!',
+        type: 'success'
+      })
+    }
+
     onMounted(() => {
-      if (loginStatu.value && !props.isPerson) getInfo()
+      if (String(loginStatu.value) === 'true' && !props.isPerson) getInfo()
     })
 
     return {
@@ -255,7 +301,9 @@ export default defineComponent({
       router,
       getInfo,
       collectSong,
-      downloadSong
+      downloadSong,
+      addToPlayList,
+      addSong
     }
   }
 })

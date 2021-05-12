@@ -86,6 +86,14 @@ class User extends Abstract {
   postComment (data: any) {
     return this.postReq({ url: 'User.postComment', data })
   }
+
+  /**
+* @method 用户发布歌单
+* @param {string} account 用户
+*/
+  postPlaylist (data: any) {
+    return this.postReq({ url: 'User.postPlaylist', data })
+  }
 }
 
 // 单列模式返回对象

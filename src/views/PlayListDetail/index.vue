@@ -311,7 +311,7 @@ export default defineComponent({
     }
 
     async function submitComment (id:string) {
-      if (!loginStatu) {
+      if (String(loginStatu.value) === 'false') {
         ElMessage.warning({
           message: '请先登录!!!',
           type: 'warning'

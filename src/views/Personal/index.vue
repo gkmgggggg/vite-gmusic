@@ -82,14 +82,48 @@
           <song-sheet :sheetList="myList" :num="num"></song-sheet>
         </div> -->
         <div class="my collect module shadow">
-          <div class="card-header flex-row">
+          <div class="card-header flex-row" style="display:flex;justify-content:space-between">
             <span>我收藏的歌单</span>
+            <el-button
+              type="danger"
+              plain
+              size="mini"
+              style="margin-top: 5px"
+              @click="dialogFormVisible=true"
+              >创建歌单</el-button
+            >
           </div>
           <SongSheet :sheetList="collectList" :num="num" />
         </div>
       </div>
     </div>
   </div>
+  <el-dialog title="创建歌单" v-model="dialogFormVisible" width="30%">
+    <el-form :model="form">
+      <el-form-item label="歌单名称" :label-width="50">
+        <el-input v-model="form.name" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="歌单简介" :label-width="50">
+        <el-input v-model="form.desc" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="标签" :label-width="50">
+        <el-select v-model="form.tagList" multiple placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="createPlaylist()">确 定</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts">
@@ -100,6 +134,7 @@ import Empty from '@/components/Empty/index.vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { userApi } from '@/api/index'
+import { ElMessage } from 'element-plus'
 
 export default defineComponent({
   components: {
@@ -123,7 +158,38 @@ export default defineComponent({
       songs: [],
       num: 2,
       type: 1,
-      userProfile: {}
+      userProfile: {},
+      dialogFormVisible: false,
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: '',
+        tagList: []
+      },
+      options: [{
+        value: '华语',
+        label: '华语'
+      }, {
+        value: '流行',
+        label: '流行'
+      }, {
+        value: '粤语',
+        label: '粤语'
+      }, {
+        value: 'ACG',
+        label: 'ACG'
+      }, {
+        value: '电子',
+        label: '电子'
+      }, {
+        value: '民谣',
+        label: '民谣'
+      }]
     })
     const store = useStore()
     const router = useRouter()
@@ -161,6 +227,18 @@ export default defineComponent({
       // }
       // state.songs = res.data
     }
+
+    function createPlaylist () {
+      if (!state.form.name) {
+        ElMessage.warning({
+          message: '歌单名不为空!!!',
+          type: 'warning'
+        })
+        return
+      }
+      state.dialogFormVisible = false
+      userApi.postPlaylist({ name: state.form.name, tagList: state.form.tagList, createId: userInfo.value._id, desc: state.form.desc })
+    }
     onMounted(() => {})
     onUpdated(() => {})
     return {
@@ -169,7 +247,8 @@ export default defineComponent({
       userInfo,
       getUserInfo,
       getUserPlaylist,
-      getUserSong
+      getUserSong,
+      createPlaylist
     }
   }
 })
