@@ -73,11 +73,12 @@ export default defineComponent({
     })
     const store = useStore()
     const router = useRouter()
+
     // 动画交互
-    function btnClick (event:any) {
+    function btnClick (event: any) {
       const d1 = event.target.parentNode.parentNode
       const d = d1.children
-      const l:any = document.getElementsByClassName('content')
+      const l: any = document.getElementsByClassName('content')
 
       if (event.target.innerHTML === '注册') {
         for (const i of d) {
@@ -91,6 +92,7 @@ export default defineComponent({
         for (const j of l) j.style.bottom = '450px'
       }
     }
+
     // 处理登录
     async function handleLogin () {
       if (verification()) {
@@ -118,6 +120,7 @@ export default defineComponent({
         }
       }
     }
+
     // 处理注册
     async function handleRegister () {
       if (verification()) {
@@ -137,6 +140,7 @@ export default defineComponent({
         }
       }
     }
+
     // 登录数据验证
     function verification () {
       const myreg = /^[1][3,4,5,7,8,9][0-9]{9}$/
@@ -158,6 +162,7 @@ export default defineComponent({
       }
       return true
     }
+
     return {
       ...toRefs(state),
       router,
@@ -179,6 +184,7 @@ export default defineComponent({
   background-size: cover;
   height: 100vh;
   box-sizing: border-box;
+
   .container {
     box-sizing: border-box;
     width: 100%;
@@ -186,6 +192,7 @@ export default defineComponent({
     display: flex;
     align-items: center;
     justify-content: center;
+
     .form_login {
       width: 800px;
       height: 500px;
@@ -197,6 +204,7 @@ export default defineComponent({
       .left-part {
         width: 400px;
         background: white;
+
         div {
           display: flex;
           flex-direction: column;
@@ -207,9 +215,11 @@ export default defineComponent({
           transition: 0.6s;
           bottom: 450px;
         }
+
         h2 {
           font-size: 40px;
         }
+
         input {
           border: none;
           width: 300px;
@@ -217,6 +227,7 @@ export default defineComponent({
           margin: 30px 20px;
           height: 40px;
         }
+
         button {
           color: white;
           width: 100px;
@@ -228,9 +239,11 @@ export default defineComponent({
           border-radius: 30px;
           cursor: pointer;
           transition: 0.6s;
+
           &:focus {
             outline: none;
           }
+
           &:hover {
             background: rgba($color: #fd79a8, $alpha: 1);
             border: 1px solid #c44569;
@@ -243,6 +256,7 @@ export default defineComponent({
         flex: 1;
         text-align: center;
         color: white;
+
         div {
           bottom: 0px;
           height: 500px;
@@ -252,14 +266,17 @@ export default defineComponent({
           position: relative;
           transition: 0.6s;
         }
+
         h2 {
           font-size: 30px;
           margin-bottom: 10px;
         }
+
         p {
           font-size: 20px;
           margin-bottom: 10px;
         }
+
         button {
           color: white;
           width: 100px;
@@ -271,9 +288,11 @@ export default defineComponent({
           border-radius: 30px;
           cursor: pointer;
           transition: 0.6s;
+
           &:focus {
             outline: none;
           }
+
           &:hover {
             background: rgba($color: #c44569, $alpha: 1);
             border: 1px solid #c44569;
